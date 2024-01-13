@@ -1,0 +1,36 @@
+version: '3.9'
+services:
+  mini_wallet:
+    container_name: mini_wallet
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '80:80'
+    volumes:
+      - type: bind
+        source: ./
+        target: /app
+      - /app/tmp
+    command: ["air"]
+
+  postgres:
+    container_name: mini-wallet-pg
+    image: postgres:14-alpine
+    ports:
+      - '5656:5432'
+    volumes:
+      - data:/data/postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres_password
+      POSTGRES_DB: mini_wallet_db
+    
+#   redis:
+#     container_name: transaction-redis
+#     image: redis
+#     ports:
+#       - '6969:6379'
+
+volumes:
+  data:
